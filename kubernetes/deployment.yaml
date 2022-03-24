@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stocksapi
+  labels:
+    app: stocksapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stocksapi
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: stocksapi
+    spec:
+      containers:
+        - image: localhost:5001/stocksapi:1.0.0
+          name: stocksapi
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "20m"
+              memory: "55M"
+            limits:
+              cpu: "20m"
+              memory: "55M"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 7070
+            initialDelaySeconds: 90
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 7070
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+          env:
+            - name: ENVVARNAME
+              value: ENVVARVALUE
+          ports:
+            - containerPort: 7070
+              name: stocksapi
+          volumeMounts:
+            - mountPath: /data
+              name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+      restartPolicy: Always

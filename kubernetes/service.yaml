@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stocksapi
+  labels:
+    app: stocksapi
+spec:
+  selector:
+    app: stocksapi
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
