@@ -2,10 +2,10 @@ package seed
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"time"
-	"log"
 
 	"github.com/gocarina/gocsv"
 	"github.com/jinzhu/gorm"
@@ -47,14 +47,14 @@ func LoadDB(db *gorm.DB) {
 			stockEntry := convertToStockEntry(entry)
 			stockEntry.SaveStockEntry(db)
 		}
-	} 
+	}
 }
 
 func convertToStockEntry(entry *FileEntry) *models.StockEntry {
 
 	stockEntry := models.StockEntry{}
 
-	if entryDate, err := time.Parse("2-Jan-2006", entry.EntryDate); err == nil {
+	if entryDate, err := time.Parse("2-Jan-06", entry.EntryDate); err == nil {
 		stockEntry.EntryDate = entryDate
 	}
 
